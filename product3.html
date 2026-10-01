@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="On-Demand Mobile Solutions — order dispatching, real-time matching, driver routing, and back-office management.">
+  <title>On-Demand | Limons</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --u:min(100vw / 1672, 100vh / 941);
+      --ease:cubic-bezier(.16,1,.3,1);
+      --accent:#ff5361;
+      --accent-2:#ea2b64;
+      --rose:#f6a2aa;
+      --ink:#231a1d;
+      --paper:#f8f7f6;
+      --white:#fff;
+      --plum:#28263b;
+      --plum-2:#37222a;
+      --black:#060203;
+      --muted:#6e6668;
+      --line:#ebe6e7;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#9A1E23 #0a0304}
+    body{font-family:'Poppins',system-ui,sans-serif;background:var(--paper);color:var(--ink);overflow-x:hidden}
+    img{max-width:100%;display:block}
+    a{color:inherit;text-decoration:none}
+    .abs{position:absolute}
+
+    /* ---------- HERO ---------- */
+    .hero{
+      position:relative;
+      width:100vw;
+      min-height:100vh;
+      min-height:100dvh;
+      overflow:hidden;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      background:#050102 url("Product page bg.png") center top/cover no-repeat;
+      color:#fff;
+    }
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:radial-gradient(circle at 50% 60%,rgba(194,24,75,.16),transparent 50%);
+      pointer-events:none;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:0;
+      height:150px;
+      background:linear-gradient(to bottom,rgba(5,1,2,0),#050102 88%);
+      pointer-events:none;
+      z-index:6;
+    }
+    .stage{position:relative;flex:none;width:calc(var(--u)*1672);height:calc(var(--u)*940)}
+    
+    /* ---------- BRAND LOGO & SHARED NAVBAR ---------- */
+    .logo{left:calc(var(--u)*64);top:calc(var(--u)*6);display:flex;align-items:center;z-index:100;text-decoration:none}
+    .logo img{height:calc(var(--u)*104);width:auto;display:block}
+    .logo .fallback{display:none;font-size:calc(var(--u)*25);font-weight:800;letter-spacing:-.04em;color:#fff}
+    .logo img.bad{display:none} .logo img.bad + .fallback{display:block}
+
+    .nav{
+      top:calc(var(--u)*36);
+      left:calc(var(--u)*470);
+      width:calc(var(--u)*740);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:calc(var(--u)*36);
+      z-index:90;
+      pointer-events:auto;
+    }
+    .nav-link{
+      font-size:calc(var(--u)*19.5);
+      color:rgba(255,255,255,.72);
+      text-decoration:none;
+      transition:color .25s ease;
+      white-space:nowrap;
+      display:inline-flex;
+      align-items:center;
+      gap:calc(var(--u)*6);
+      cursor:pointer;
+    }
+    .nav-link:hover, .nav-link.on{
+      color:#fff;
+    }
+    .drop-arrow{
+      width:calc(var(--u)*10);
+      height:calc(var(--u)*6);
+      transition:transform .25s var(--ease);
+    }
+    .nav-item-dropdown{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      padding:calc(var(--u)*8) 0;
+    }
+    .nav-item-dropdown:hover .drop-arrow{
+      transform:rotate(180deg);
+    }
+    .dropdown-menu{
+      position:absolute;
+      top:100%;
+      left:50%;
+      transform:translateX(-50%) translateY(12px);
+      width:calc(var(--u)*360);
+      min-width:290px;
+      background:rgba(12,4,7,0.96);
+      backdrop-filter:blur(24px);
+      -webkit-backdrop-filter:blur(24px);
+      border:1px solid rgba(255,83,97,0.35);
+      border-radius:calc(var(--u)*18);
+      padding:calc(var(--u)*10);
+      box-shadow:0 calc(var(--u)*24) calc(var(--u)*60) rgba(0,0,0,0.8), 0 0 calc(var(--u)*30) rgba(255,83,97,0.18);
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      transition:opacity .25s var(--ease), transform .25s var(--ease), visibility .25s;
+      z-index:120;
+    }
+    .nav-item-dropdown:hover .dropdown-menu,
+    .nav-item-dropdown:focus-within .dropdown-menu{
+      opacity:1;
+      visibility:visible;
+      pointer-events:auto;
+      transform:translateX(-50%) translateY(0);
+    }
+    .dropdown-item{
+      display:flex;
+      align-items:center;
+      gap:calc(var(--u)*12);
+      padding:calc(var(--u)*10) calc(var(--u)*14);
+      border-radius:calc(var(--u)*12);
+      color:rgba(255,255,255,0.82);
+      text-decoration:none;
+      transition:all .22s var(--ease);
+    }
+    .dropdown-item:hover{
+      background:rgba(255,83,97,0.18);
+      color:#fff;
+      transform:translateX(calc(var(--u)*4));
+    }
+    .dropdown-item.active{
+      background:linear-gradient(90deg, rgba(255,83,97,0.32), rgba(234,43,100,0.12));
+      border-left:calc(var(--u)*3) solid var(--accent);
+      color:#fff;
+    }
+    .drop-badge{
+      width:calc(var(--u)*30);
+      height:calc(var(--u)*30);
+      border-radius:calc(var(--u)*8);
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.15);
+      display:grid;
+      place-items:center;
+      font-size:calc(var(--u)*12);
+      font-weight:700;
+      color:var(--rose);
+      flex-shrink:0;
+    }
+    .dropdown-item:hover .drop-badge, .dropdown-item.active .drop-badge{
+      background:linear-gradient(135deg, var(--accent), var(--accent-2));
+      color:#fff;
+      border-color:transparent;
+      box-shadow:0 0 calc(var(--u)*12) rgba(255,83,97,0.4);
+    }
+    .drop-text{
+      display:flex;
+      flex-direction:column;
+      text-align:left;
+    }
+    .drop-title{
+      font-size:calc(var(--u)*14);
+      font-weight:600;
+      color:#fff;
+      line-height:1.2;
+    }
+    .drop-desc{
+      font-size:calc(var(--u)*11);
+      color:rgba(255,255,255,0.52);
+      margin-top:calc(var(--u)*2);
+      line-height:1.2;
+    }
+
+    .cta{
+      left:calc(var(--u)*1420);
+      top:calc(var(--u)*28);
+      width:calc(var(--u)*172);
+      height:calc(var(--u)*57);
+      border:calc(var(--u)*1.6) solid #c04057;
+      border-radius:99px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:calc(var(--u)*9);
+      font-size:calc(var(--u)*18.5);
+      font-weight:500;
+      color:#fff;
+      text-decoration:none;
+      background:rgba(80,10,20,.25);
+      transition:background .35s,box-shadow .35s,transform .2s;
+      z-index:100;
+    }
+    .cta:hover{
+      background:rgba(192,64,87,.35);
+      box-shadow:0 0 calc(var(--u)*30) rgba(192,64,87,.45);
+      transform:translateY(-1px);
+    }
+    .cta svg{width:calc(var(--u)*15);height:calc(var(--u)*15)}
+
+    .mobile-toggle{
+      display:none;
+      position:fixed;
+      top:20px;
+      right:20px;
+      width:44px;
+      height:44px;
+      border-radius:10px;
+      background:rgba(25,7,12,0.88);
+      border:1px solid rgba(255,83,97,0.35);
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      gap:5px;
+      cursor:pointer;
+      z-index:200;
+    }
+    .mobile-toggle span{
+      width:20px;
+      height:2px;
+      background:#fff;
+      transition:all .3s ease;
+    }
+
+    /* ---------- HERO CONTENT ---------- */
+    .product-logo{left:calc(var(--u)*722);top:calc(var(--u)*142);width:calc(var(--u)*228);z-index:7}
+    .product-logo img{width:100%;height:auto}
+    .hero-copy{position:absolute;left:0;top:calc(var(--u)*262);width:100%;text-align:center;z-index:7}
+    .hero-copy h1{font-size:calc(var(--u)*38);font-weight:600;line-height:1.28;white-space:nowrap}
+    .hero-copy h1 .grad{background:linear-gradient(90deg,#fe9ebb 0%,#fe93a6 38%,#fe5f74 72%,#fb5357 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero-copy p{margin:calc(var(--u)*10) auto 0;width:calc(var(--u)*780);font-size:calc(var(--u)*20);font-weight:400;line-height:1.45;color:rgba(255,255,255,.75)}
+    .mock{position:absolute;left:calc(var(--u)*476);top:calc(var(--u)*462);width:calc(var(--u)*720);z-index:4;pointer-events:none}
+    .mock img{width:100%;border-radius:calc(var(--u)*20);filter:drop-shadow(0 calc(var(--u)*30) calc(var(--u)*50) rgba(0,0,0,.65))}
+
+    /* ---------- SECTIONS ---------- */
+    .section{position:relative;padding:108px 6vw 112px;background:#fff}
+    .section.alt{background:var(--paper)}
+    .container{width:min(1160px,92vw);margin:0 auto}
+    .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+    .eyebrow::before{content:"";width:28px;height:2px;background:currentColor;display:block}
+    .section-head{text-align:center;max-width:800px;margin:0 auto 56px}
+    .section-head h2{font-size:42px;line-height:1.15;letter-spacing:-.035em;margin-top:13px;color:#30282b}
+    .section-head p{font-size:15px;line-height:1.8;color:#736a6c;margin-top:16px}
+    
+    /* Full visual card */
+    .visual-full{
+      display:flex;
+      justify-content:center;
+      margin:0 auto 48px;
+      max-width:880px;
+      position:relative;
+    }
+    .visual-full img{
+      width:100%;
+      height:auto;
+      border-radius:20px;
+      background:#fff;
+      padding:10px;
+      box-shadow:0 24px 50px rgba(35,10,18,.12);
+      border:1px solid rgba(234,43,100,0.12);
+      transition:transform .3s ease, box-shadow .3s ease;
+    }
+    .visual-full img:hover{
+      transform:translateY(-4px);
+      box-shadow:0 30px 60px rgba(35,10,18,.18);
+    }
+
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:20px;text-align:center}
+    .feature-card{
+      background:linear-gradient(145deg,#fff,#fbf7f8);
+      border:1px solid #eddfe2;
+      border-radius:20px;
+      padding:32px 24px;
+      box-shadow:0 12px 30px rgba(44,16,23,.05);
+      transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+    }
+    .feature-card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 20px 45px rgba(255,83,97,.12);
+      border-color:rgba(255,83,97,.3);
+    }
+    .feature-icon{
+      width:44px;
+      height:44px;
+      border:1.5px solid #ff4b86;
+      border-radius:50%;
+      margin:0 auto 16px;
+      display:grid;
+      place-items:center;
+      color:#ea2b64;
+      font-size:16px;
+      font-weight:700;
+      background:rgba(255,83,97,0.08);
+    }
+    .feature-card h4{font-size:14px;font-weight:700;color:#40363a;letter-spacing:.02em;text-transform:uppercase;margin-bottom:10px}
+    .feature-card p{font-size:13px;line-height:1.7;color:#7c7074}
+
+    /* ---------- CTA BANDS ---------- */
+    .cta-band{padding:76px 6vw;background:linear-gradient(110deg,#201f30 0%,#2b1c25 100%);color:#fff;text-align:center;position:relative;overflow:hidden}
+    .cta-band::before{content:"";position:absolute;width:480px;height:480px;right:-180px;top:-250px;background:radial-gradient(circle,rgba(255,83,97,.22),transparent 68%)}
+    .cta-band .band-icon{width:46px;height:46px;border:1px solid rgba(255,255,255,.22);border-radius:14px;display:grid;place-items:center;margin:0 auto 16px;background:rgba(255,255,255,.05);color:#ff5361}
+    .cta-band .band-icon svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8}
+    .cta-band h3{font-size:20px;letter-spacing:.02em;font-weight:600;text-transform:uppercase}
+    .cta-band small{display:block;font-size:13px;color:rgba(255,255,255,.68);margin:8px 0 26px}
+    .form{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+    .form input{width:220px;height:44px;border:1px solid rgba(255,255,255,.2);border-radius:6px;background:rgba(255,255,255,.05);padding:0 14px;color:#fff;outline:none;font:inherit;font-size:13px}
+    .form input::placeholder{color:rgba(255,255,255,.45)}
+    .form button{height:44px;border:0;border-radius:6px;background:linear-gradient(90deg,#ff5a61,#ea2b64);padding:0 28px;color:#fff;font:700 12px 'Poppins',sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 24px rgba(255,70,90,.3);transition:transform .2s,box-shadow .2s}
+    .form button:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(255,70,90,.4)}
+
+    /* ---------- INDUSTRY BAND ---------- */
+    .industry-band{
+      background:#1f1e2e;
+      color:#fff;
+      padding:64px 6vw;
+      text-align:center;
+      position:relative;
+      border-top:1px solid rgba(255,255,255,.06);
+    }
+    .industry-band h3{font-size:16px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.85)}
+    .industries{
+      display:flex;
+      justify-content:center;
+      gap:40px;
+      flex-wrap:wrap;
+      margin:34px auto 0;
+      max-width:960px;
+    }
+    .industry{
+      color:#e4e0e2;
+      text-align:center;
+      min-width:90px;
+      font-size:11px;
+      font-weight:600;
+      letter-spacing:.04em;
+    }
+    .industry .ico{
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      border:1px solid rgba(255,83,97,.4);
+      background:rgba(255,83,97,.08);
+      margin:0 auto 10px;
+      display:grid;
+      place-items:center;
+      font-size:18px;
+      color:#ff6b7e;
+      transition:transform .2s, background .2s;
+    }
+    .industry:hover .ico{
+      transform:scale(1.1);
+      background:rgba(255,83,97,.2);
+    }
+    .industry-band p{font-size:13px;color:rgba(255,255,255,.62);margin:28px auto 0;max-width:680px;line-height:1.7}
+
+    /* ---------- FOOTER ---------- */
+    footer{background:#050506;color:#fff;padding:58px 6vw 24px}
+    .footer-grid{width:min(1160px,92vw);margin:0 auto;display:grid;grid-template-columns:1.3fr repeat(4,1fr);gap:40px}
+    .footer-brand h4{font-size:18px;letter-spacing:-.02em;margin-bottom:11px}
+    .footer-brand p{font-size:11px;line-height:1.8;color:rgba(255,255,255,.42);max-width:240px}
+    footer h5{font-size:11px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:15px;color:rgba(255,255,255,.75)}
+    footer a{display:block;text-decoration:none;font-size:11px;color:rgba(255,255,255,.42);line-height:2.05;transition:color .25s}
+    footer a:hover{color:#fff}
+    .footer-bottom{width:min(1160px,92vw);margin:44px auto 0;padding-top:18px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:rgba(255,255,255,.3);font-size:10px}
+
+    /* ---------- CURSOR ---------- */
+    .cur{position:fixed;left:0;top:0;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:1.5px solid #ff3d6e;box-shadow:0 0 12px #c2184b,0 0 30px #9a1240,0 0 60px rgba(104,2,2,.9),inset 0 0 14px rgba(194,24,75,.55);pointer-events:none;z-index:9999;opacity:0;transition:width .3s var(--ease),height .3s var(--ease),margin .3s var(--ease),background .3s,opacity .25s}
+    .cur.dot{width:8px;height:8px;margin:-4px 0 0 -4px;background:#ff5a86;border:0;box-shadow:0 0 8px #ff2d63,0 0 22px #c2184b}
+    .cur.hov{width:70px;height:70px;margin:-35px 0 0 -35px;background:rgba(194,24,75,.16)}
+    .cur.dn{width:26px;height:26px;margin:-13px 0 0 -13px}
+    @media (pointer:fine){*{cursor:none!important}}
+    @media (pointer:coarse){.cur{display:none}}
+
+    /* ---------- REVEAL ANIMATION ---------- */
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+    .reveal.in{opacity:1;transform:none}
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width:1080px){
+      .nav{left:calc(var(--u)*400);width:calc(var(--u)*800);gap:calc(var(--u)*24)}
+      .nav-link{font-size:calc(var(--u)*18)}
+      .footer-grid{grid-template-columns:repeat(3,1fr)}
+    }
+
+    @media (max-width:820px){
+      :root{--u:calc(100vw / 600)}
+      .stage{width:calc(var(--u)*600);height:calc(var(--u)*860)}
+      .logo{left:calc(var(--u)*30);top:calc(var(--u)*20)}
+      .logo img{height:42px}
+      .cta{display:none}
+
+      /* Mobile drawer */
+      .mobile-toggle{display:flex}
+      .nav{
+        position:fixed;
+        inset:0;
+        width:100vw;
+        height:100vh;
+        background:rgba(8,2,4,0.98);
+        backdrop-filter:blur(24px);
+        -webkit-backdrop-filter:blur(24px);
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        gap:24px;
+        z-index:180;
+        opacity:0;
+        pointer-events:none;
+        transition:opacity .35s var(--ease);
+      }
+      .nav.open{
+        opacity:1;
+        pointer-events:auto;
+      }
+      .nav-link{
+        font-size:22px;
+        color:rgba(255,255,255,0.85);
+      }
+      .nav-item-dropdown{
+        flex-direction:column;
+      }
+      .dropdown-menu{
+        position:static;
+        transform:none;
+        opacity:1;
+        visibility:visible;
+        pointer-events:auto;
+        box-shadow:none;
+        border:1px solid rgba(255,83,97,0.25);
+        background:rgba(25,7,12,0.8);
+        margin-top:12px;
+        max-width:320px;
+      }
+
+      .product-logo{left:50%;transform:translateX(-50%);top:calc(var(--u)*130);width:calc(var(--u)*220)}
+      .hero-copy{top:calc(var(--u)*250);padding:0 24px}
+      .hero-copy h1{font-size:calc(var(--u)*36);white-space:normal}
+      .hero-copy p{width:100%;font-size:calc(var(--u)*18);line-height:1.55}
+      .mock{left:50%;transform:translateX(-50%);top:calc(var(--u)*480);width:calc(var(--u)*540)}
+
+      .section{padding:72px 6vw}
+      .section-head h2{font-size:32px}
+      .features{grid-template-columns:1fr;gap:20px}
+      .footer-grid{grid-template-columns:1fr 1fr}
+      .industries{gap:20px}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================
+       HERO SECTION WITH UNIFIED NAVBAR & DROPDOWN
+  =========================================================== -->
+  <header class="hero">
+    <div class="stage">
+      <a class="abs logo" href="index.html">
+        <img src="Horizontal Logo.png" alt="Limons" onerror="this.classList.add('bad')">
+        <span class="fallback">Limons</span>
+      </a>
+
+      <nav class="abs nav" id="mainNav">
+        <a class="nav-link" href="our-apps.html">Our Work</a>
+        
+        <!-- SERVICES DROPDOWN -->
+        <div class="nav-item-dropdown" id="servicesDropdown">
+          <a class="nav-link" href="custom-app-development.html" aria-haspopup="true" aria-expanded="false">
+            Services
+            <svg class="drop-arrow" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M1 1l4 4 4-4"/>
+            </svg>
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="custom-app-development.html">
+              <span class="drop-badge">01</span>
+              <div class="drop-text">
+                <span class="drop-title">Custom App Development</span>
+                <span class="drop-desc">Bespoke iOS, Android &amp; cloud apps</span>
+              </div>
+            </a>
+            <a class="dropdown-item" href="our-apps.html">
+              <span class="drop-badge">02</span>
+              <div class="drop-text">
+                <span class="drop-title">Our Apps</span>
+                <span class="drop-desc">10+ years of mobile app case studies</span>
+              </div>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Products dropdown -->
+        <div class="nav-item-dropdown">
+          <a class="nav-link on" href="javascript:void(0)" aria-haspopup="true" aria-expanded="false">
+            Products
+            <svg class="drop-arrow" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M1 1l4 4 4-4"/>
+            </svg>
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="product1.html">
+              <span class="drop-badge">01</span>
+              <div class="drop-text">
+                <span class="drop-title">Social TV</span>
+                <span class="drop-desc">Interactive engagement platform</span>
+              </div>
+            </a>
+            <a class="dropdown-item" href="product2.html">
+              <span class="drop-badge">02</span>
+              <div class="drop-text">
+                <span class="drop-title">File Sync</span>
+                <span class="drop-desc">Real-time mobile file synchronization</span>
+              </div>
+            </a>
+            <a class="dropdown-item active" href="product3.html">
+              <span class="drop-badge">03</span>
+              <div class="drop-text">
+                <span class="drop-title">On-Demand</span>
+                <span class="drop-desc">Real-time matching &amp; dispatch</span>
+              </div>
+            </a>
+            <a class="dropdown-item" href="product4.html">
+              <span class="drop-badge">04</span>
+              <div class="drop-text">
+                <span class="drop-title">Video Player</span>
+                <span class="drop-desc">Monetization &amp; streaming SDK</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <a class="nav-link" href="#">Resources</a>
+        <a class="nav-link" href="#">About</a>
+      </nav>
+
+      <div class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <a class="abs cta" href="#contact">
+        Get in Touch
+        <svg viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.6">
+          <path d="M3 13L13 3M5 3h8v8"/>
+        </svg>
+      </a>
+
+      <!-- Brand Product Logo -->
+      <div class="abs product-logo">
+        <img src="logo_ondemand.png" alt="On-Demand">
+      </div>
+
+      <!-- Hero Copy -->
+      <div class="hero-copy">
+        <h1>Powering the <span class="grad">Real-Time On-Demand Economy</span></h1>
+        <p>An end-to-end platform engineered for hyper-growth marketplaces, instant order dispatching, algorithmic driver matching, and seamless real-time operations.</p>
+      </div>
+
+      <!-- 3D Hero Mockup -->
+      <div class="mock">
+        <img src="ondemand-hero-mockup.jpg" alt="On-Demand Platform Hero Mockup">
+      </div>
+    </div>
+  </header>
+
+
+  <!-- ==========================================================
+       SECTION 1 — PLATFORM FOR THE REAL-TIME ECONOMY
+  =========================================================== -->
+  <section class="section reveal">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Marketplace Architecture</span>
+        <h2>Platform for the Real-Time Economy</h2>
+        <p>
+          Our platform is built upon <strong>three robust pillars</strong> that come together as one cohesive ecosystem to deliver exceptional reliability, millisecond latency, and effortless horizontal scalability.
+        </p>
+      </div>
+
+      <!-- Architecture Diagram (schema.jpg from Appscend) -->
+      <div class="visual-full">
+        <img src="schema.jpg" alt="On-Demand Platform Architecture: Customer Facing Order Page, Supplier Mobile App, Customer Management Backend">
+      </div>
+
+      <div class="features">
+        <article class="feature-card">
+          <div class="feature-icon">1</div>
+          <h4>Customer-Facing Order Page</h4>
+          <p>Frictionless web and mobile ordering experience allowing clients to submit on-demand requests dispatched directly to your nearby supplier fleet.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">2</div>
+          <h4>Mobile App for Suppliers</h4>
+          <p>Dedicated iOS and Android application with turn-by-turn navigation, instant push notifications, order accept/decline flows, and live earnings.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">3</div>
+          <h4>Customer Management Backend</h4>
+          <p>Enterprise command center for orchestrating customer accounts, supplier approvals, dispute resolution, financial payouts, and operational metrics.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==========================================================
+       CTA 1 — REQUEST A DEMO
+  =========================================================== -->
+  <section class="cta-band reveal" id="contact">
+    <div class="band-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 21s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/>
+        <circle cx="12" cy="9" r="2.5"/>
+      </svg>
+    </div>
+    <h3>Want to See Our On-Demand Platform in Action?</h3>
+    <small>It takes only 20 minutes to see how our turn-key infrastructure can launch your marketplace.</small>
+
+    <form class="form" onsubmit="event.preventDefault(); alert('Thank you! A Limons product specialist will reach out shortly.');">
+      <input type="text" placeholder="Full Name" aria-label="Full Name" required>
+      <input type="text" placeholder="Company Name" aria-label="Company Name" required>
+      <input type="email" placeholder="Work Email" aria-label="Work Email" required>
+      <button type="submit">Request a Demo</button>
+    </form>
+  </section>
+
+
+  <!-- ==========================================================
+       SECTION 2 — ORDER DISPATCHING & TRACKING
+  =========================================================== -->
+  <section class="section alt reveal">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Dispatch &amp; Tracking</span>
+        <h2>Order Dispatching, Real-Time Matching &amp; Live Monitoring</h2>
+        <p>Automate fulfillment with intelligent geolocation matching, live map updates, and automated customer notifications.</p>
+      </div>
+
+      <!-- Live Tracking Screens (on_demand_05.jpg from Appscend) -->
+      <div class="visual-full">
+        <img src="on_demand_05.jpg" alt="Order Dispatching and Real-Time Tracking Mobile Screens">
+      </div>
+
+      <div class="features">
+        <article class="feature-card">
+          <div class="feature-icon">1</div>
+          <h4>Instant Order Platform</h4>
+          <p>Customers submit requests on web or mobile; orders are instantly evaluated and assigned to the closest available qualified supplier.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">2</div>
+          <h4>Sub-Second GPS Tracking</h4>
+          <p>Customers and dispatchers track live driver locations on interactive maps with accurate ETAs via encrypted WebSockets.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">3</div>
+          <h4>Frictionless Payments</h4>
+          <p>Seamlessly process pre-authorizations, tips, cancellation fees, and auto-settlements through Stripe, PayPal, or custom merchant accounts.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==========================================================
+       CTA 2 — REQUEST PRICING
+  =========================================================== -->
+  <section class="cta-band reveal">
+    <div class="band-icon">
+      <svg viewBox="0 0 24 24">
+        <rect x="2" y="5" width="20" height="14" rx="3"/>
+        <line x1="2" y1="10" x2="22" y2="10"/>
+      </svg>
+    </div>
+    <h3>Interested in Scaling with Limons On-Demand?</h3>
+    <small>Predictable tier-based pricing built to grow seamlessly alongside your transaction volume.</small>
+
+    <form class="form" onsubmit="event.preventDefault(); alert('Thank you! Our pricing deck has been queued for dispatch.');">
+      <input type="text" placeholder="Full Name" aria-label="Full Name" required>
+      <input type="text" placeholder="Company Name" aria-label="Company Name" required>
+      <input type="email" placeholder="Work Email" aria-label="Work Email" required>
+      <button type="submit">Request Pricing</button>
+    </form>
+  </section>
+
+
+  <!-- ==========================================================
+       SECTION 3 — SUPPLIER MOBILE APP
+  =========================================================== -->
+  <section class="section reveal">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Fleet &amp; Drivers</span>
+        <h2>Cross-Platform Mobile Application for Suppliers</h2>
+        <p>Give your drivers and service providers intuitive tools designed for fast execution, clear route details, and transparent earnings.</p>
+      </div>
+
+      <!-- Supplier Screens (on_demand_06.jpg from Appscend) -->
+      <div class="visual-full">
+        <img src="on_demand_06.jpg" alt="Supplier Mobile Application Screens">
+      </div>
+
+      <div class="features">
+        <article class="feature-card">
+          <div class="feature-icon">1</div>
+          <h4>Real-Time Audio &amp; Push Alerts</h4>
+          <p>Suppliers receive high-priority alerts with payout values, pickup locations, and navigation links within seconds of job creation.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">2</div>
+          <h4>Lifecycle Order Statuses</h4>
+          <p>One-tap transitions from 'Accepted' to 'En Route', 'Arrived', and 'Completed' keep all stakeholders synchronized at every moment.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">3</div>
+          <h4>Verified Rating System</h4>
+          <p>Two-way rating algorithms ensure marketplace safety, elevate top-performing contractors, and maintain high customer satisfaction.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==========================================================
+       INDUSTRIES BAND
+  =========================================================== -->
+  <section class="industry-band reveal">
+    <h3>Our On-Demand Platform Powers Diverse Industries:</h3>
+
+    <div class="industries">
+      <div class="industry"><div class="ico">🍔</div>FOOD DELIVERY</div>
+      <div class="industry"><div class="ico">📦</div>LOGISTICS</div>
+      <div class="industry"><div class="ico">🛠️</div>LOCAL SERVICES</div>
+      <div class="industry"><div class="ico">🚕</div>TRANSPORT</div>
+      <div class="industry"><div class="ico">🅿️</div>VALET &amp; PARKING</div>
+      <div class="industry"><div class="ico">🩺</div>HEALTHCARE</div>
+    </div>
+
+    <p>
+      Have a unique on-demand business model? Share your operational requirements and our platform architects will design a tailor-made workflow.
+    </p>
+
+    <form class="form" style="margin-top:28px" onsubmit="event.preventDefault(); alert('Inquiry received! We will prepare a customized assessment.');">
+      <input type="text" placeholder="Industry Vertical" aria-label="Industry Vertical" required>
+      <input type="text" placeholder="Company Name" aria-label="Company Name" required>
+      <input type="email" placeholder="Work Email" aria-label="Work Email" required>
+      <button type="submit">Submit Inquiry</button>
+    </form>
+  </section>
+
+
+  <!-- ==========================================================
+       SECTION 4 — ADMIN DASHBOARD & OPERATIONS
+  =========================================================== -->
+  <section class="section alt dashboard reveal">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Backoffice &amp; Controls</span>
+        <h2>Integrated Payments &amp; Operations Management</h2>
+        <p>A mission control dashboard giving executives and operations teams complete oversight of active orders, driver clusters, and revenue health.</p>
+      </div>
+
+      <!-- Admin Dashboard Visual (admin_on_demand.jpg from Appscend) -->
+      <div class="visual-full">
+        <img src="admin_on_demand.jpg" alt="On-Demand Operations and Admin Dashboard">
+      </div>
+
+      <div class="features">
+        <article class="feature-card">
+          <div class="feature-icon">1</div>
+          <h4>Comprehensive Admin Panel</h4>
+          <p>Filter active orders by status, inspect live fleet telematics on an interactive map, and intervene instantly if delays occur.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">2</div>
+          <h4>Granular Team Roles</h4>
+          <p>Role-based access control (RBAC) separates dispatchers, support agents, and finance controllers with full audit logging.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">3</div>
+          <h4>Automated Payout Schedules</h4>
+          <p>Calculate commissions, supplier splits, and contractor tax documentation with instant bank transfers and weekly batch settlement.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==========================================================
+       UNIFIED FOOTER
+  =========================================================== -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h4>Limons</h4>
+        <p>Building next-generation digital products, interactive media experiences, and scalable cloud software.</p>
+      </div>
+      <div>
+        <h5>Products</h5>
+        <a href="product1.html">Social TV</a>
+        <a href="product2.html">File Sync</a>
+        <a href="product3.html">On-Demand</a>
+        <a href="product4.html">Video Player</a>
+      </div>
+      <div>
+        <h5>Services</h5>
+        <a href="custom-app-development.html">Custom App Development</a>
+        <a href="our-apps.html">Our Apps</a>
+        <a href="our-apps.html#portfolio">Case Studies</a>
+      </div>
+      <div>
+        <h5>Resources</h5>
+        <a href="#">Documentation</a>
+        <a href="#">Developer SDKs</a>
+        <a href="#">Case Studies</a>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <a href="#">About Us</a>
+        <a href="#">Partners</a>
+        <a href="#">Contact Support</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Limons Inc. All rights reserved.</span>
+      <span>Empowering real-time economies worldwide.</span>
+    </div>
+  </footer>
+
+  <!-- Followers -->
+  <div class="cur" id="cur"></div>
+  <div class="cur dot" id="dot"></div>
+
+  <script>
+    (() => {
+      const $ = s => document.querySelector(s);
+      const $$ = s => [...document.querySelectorAll(s)];
+      const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+      // Mobile Menu Toggle
+      const mobileToggle = $('#mobileToggle');
+      const mainNav = $('#mainNav');
+      if (mobileToggle && mainNav) {
+        mobileToggle.addEventListener('click', () => {
+          mainNav.classList.toggle('open');
+          mobileToggle.classList.toggle('open');
+        });
+      }
+
+      // Reveal-on-scroll
+      const reveal = $$('.reveal');
+      if (!reduce && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in');
+              io.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+        reveal.forEach(el => io.observe(el));
+      } else reveal.forEach(el => el.classList.add('in'));
+
+      // Smooth scroll navigation
+      $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+        const id = a.getAttribute('href');
+        if (id && id.length > 1) {
+          const target = document.querySelector(id);
+          if (target) {
+            e.preventDefault();
+            if (mainNav && mainNav.classList.contains('open')) {
+              mainNav.classList.remove('open');
+              if (mobileToggle) mobileToggle.classList.remove('open');
+            }
+            target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+          }
+        }
+      }));
+
+      // Neon follower cursor
+      let px = innerWidth / 2, py = innerHeight / 2, cx = px, cy = py;
+      const cur = $('#cur'), dot = $('#dot');
+      const showCursor = v => { cur.style.opacity = dot.style.opacity = v; };
+      addEventListener('pointermove', e => {
+        px = e.clientX; py = e.clientY; showCursor(1);
+        dot.style.transform = `translate(${px}px,${py}px)`;
+        cur.classList.toggle('hov', !!(e.target.closest && e.target.closest('a,button,input')));
+      });
+      addEventListener('pointerdown', () => cur.classList.add('dn'));
+      addEventListener('pointerup', () => cur.classList.remove('dn'));
+      document.documentElement.addEventListener('mouseleave', () => showCursor(0));
+      document.documentElement.addEventListener('mouseenter', () => showCursor(1));
+      (function follow() {
+        cx += (px - cx) * .16; cy += (py - cy) * .16;
+        cur.style.transform = `translate(${cx}px,${cy}px)`;
+        requestAnimationFrame(follow);
+      })();
+    })();
+  </script>
+</body>
+</html>
